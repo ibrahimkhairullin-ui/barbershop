@@ -349,10 +349,12 @@
       background: var(--ink-light);
     }
     .masters-header { text-align: center; margin-bottom: 64px; }
-    .masters-grid {
+    .masters-slider { overflow: hidden; width: 100%; }
+    .masters-track {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 24px;
+      transition: transform 0.4s ease;
     }
     .master-card {
       background: var(--ink);
@@ -389,6 +391,52 @@
       font-weight: 500;
       letter-spacing: 0.05em;
       text-transform: uppercase;
+    }
+    .slider-dots { display: none; }
+
+    .gallery-section {
+      background: #111;
+      padding: 60px 40px;
+    }
+    .gallery-label {
+      color: #d4a017;
+      text-align: center;
+      letter-spacing: 3px;
+      font-size: 13px;
+      margin-bottom: 0;
+    }
+    .gallery-title {
+      color: #fff;
+      text-align: center;
+      font-size: 36px;
+      margin: 0 0 8px 0;
+    }
+    .gallery-sub {
+      color: #888;
+      text-align: center;
+      margin: 0 0 40px 0;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 280px 280px;
+      gap: 12px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .gallery-item {
+      overflow: hidden;
+      border-radius: 16px;
+    }
+    .gallery-item.big {
+      grid-column: 1;
+      grid-row: 1 / 3;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .reviews {
@@ -814,16 +862,60 @@
         border-bottom: 1px solid rgba(201, 168, 76, 0.1);
       }
       .services-grid { grid-template-columns: 1fr; }
-      .masters-grid { grid-template-columns: repeat(2, 1fr); }
+      .masters-track { grid-template-columns: repeat(2, 1fr); }
       .reviews-grid { grid-template-columns: 1fr; }
       .contact-grid { grid-template-columns: 1fr; gap: 48px; }
       .form-row { grid-template-columns: 1fr; }
     }
 
+    @media (max-width: 768px) {
+      .gallery-section { padding: 40px 16px; }
+      .gallery-title { font-size: 28px; }
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        gap: 8px;
+      }
+      .gallery-item.big {
+        grid-column: 1 / 3;
+        grid-row: auto;
+        height: 220px;
+      }
+      .gallery-item:not(.big) {
+        height: 160px;
+      }
+      .masters-track {
+        display: flex;
+        gap: 0;
+      }
+      .masters-track .master-card {
+        min-width: 100%;
+        flex-shrink: 0;
+      }
+      .slider-dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #333;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+      .dot.active {
+        background: #d4a017;
+        width: 24px;
+        border-radius: 4px;
+      }
+    }
+
     @media (max-width: 640px) {
       .hero h1 { font-size: clamp(36px, 10vw, 56px); }
       .hero h1 em { font-size: 0.5em; }
-      .masters-grid { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto; }
     }
   </style>
 </head>
@@ -903,54 +995,55 @@
         <h2 class="section-title">Наши мастера</h2>
         <p class="section-subtitle" style="margin:16px auto 0">Профессионалы, которые знают толк в мужском стиле</p>
       </div>
-      <div class="masters-grid">
-        <div class="master-card reveal reveal-delay-1">
-          <div class="master-photo"><img src="master1.png" alt="Данил К."></div>
-          <div class="master-info"><div class="master-name">Данил К.</div><div class="master-role">Топ-барбер</div></div>
+      <div class="masters-slider">
+        <div class="masters-track">
+          <div class="master-card reveal reveal-delay-1">
+            <div class="master-photo"><img src="master1.png" alt="Данил К."></div>
+            <div class="master-info"><div class="master-name">Данил К.</div><div class="master-role">Топ-барбер</div></div>
+          </div>
+          <div class="master-card reveal reveal-delay-2">
+            <div class="master-photo"><img src="master2.png" alt="Артём М."></div>
+            <div class="master-info"><div class="master-name">Артём М.</div><div class="master-role">Стилист-колорист</div></div>
+          </div>
+          <div class="master-card reveal reveal-delay-3">
+            <div class="master-photo"><img src="master3.png" alt="Руслан В."></div>
+            <div class="master-info"><div class="master-name">Руслан В.</div><div class="master-role">Барбер</div></div>
+          </div>
+          <div class="master-card reveal reveal-delay-4">
+            <div class="master-photo"><img src="master4.png" alt="Михаил С."></div>
+            <div class="master-info"><div class="master-name">Михаил С.</div><div class="master-role">Мастер бороды</div></div>
+          </div>
         </div>
-        <div class="master-card reveal reveal-delay-2">
-          <div class="master-photo"><img src="master2.png" alt="Артём М."></div>
-          <div class="master-info"><div class="master-name">Артём М.</div><div class="master-role">Стилист-колорист</div></div>
-        </div>
-        <div class="master-card reveal reveal-delay-3">
-          <div class="master-photo"><img src="master3.png" alt="Руслан В."></div>
-          <div class="master-info"><div class="master-name">Руслан В.</div><div class="master-role">Барбер</div></div>
-        </div>
-        <div class="master-card reveal reveal-delay-4">
-          <div class="master-photo"><img src="master4.png" alt="Михаил С."></div>
-          <div class="master-info"><div class="master-name">Михаил С.</div><div class="master-role">Мастер бороды</div></div>
+        <div class="slider-dots">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="works" style="background:#111; padding: 60px 40px;">
-    <p style="color:#d4a017; text-align:center; letter-spacing:3px; font-size:13px;">ПОРТФОЛИО</p>
-    <h2 style="color:#fff; text-align:center; font-size:36px; margin-bottom:8px;">Наши работы</h2>
-    <p style="color:#888; text-align:center; margin-bottom:40px;">Смотрите результат — оценивайте качество</p>
+  <section id="works" class="gallery-section">
+    <p class="gallery-label">ПОРТФОЛИО</p>
+    <h2 class="gallery-title">Наши работы</h2>
+    <p class="gallery-sub">Смотрите результат — оценивайте качество</p>
 
-    <div style="
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      grid-template-rows: 280px 280px;
-      gap: 12px;
-      max-width: 1200px;
-      margin: 0 auto;
-    ">
-      <div style="grid-column:1; grid-row:1/3; overflow:hidden; border-radius:16px;">
-        <img src="gallery1.jpg" style="width:100%; height:100%; object-fit:cover;">
+    <div class="gallery-grid">
+      <div class="gallery-item big">
+        <img src="gallery1.jpg">
       </div>
-      <div style="overflow:hidden; border-radius:16px;">
-        <img src="gallery2.jpg" style="width:100%; height:100%; object-fit:cover;">
+      <div class="gallery-item">
+        <img src="gallery2.jpg">
       </div>
-      <div style="overflow:hidden; border-radius:16px;">
-        <img src="gallery3.jpg" style="width:100%; height:100%; object-fit:cover;">
+      <div class="gallery-item">
+        <img src="gallery3.jpg">
       </div>
-      <div style="overflow:hidden; border-radius:16px;">
-        <img src="gallery4.jpg" style="width:100%; height:100%; object-fit:cover;">
+      <div class="gallery-item">
+        <img src="gallery4.jpg">
       </div>
-      <div style="overflow:hidden; border-radius:16px;">
-        <img src="gallery5.jpg" style="width:100%; height:100%; object-fit:cover;">
+      <div class="gallery-item">
+        <img src="gallery5.jpg">
       </div>
     </div>
   </section>
@@ -1172,6 +1265,34 @@
       dateFormat: "d.m.Y",
       minDate: "today"
     });
+
+    const track = document.querySelector('.masters-track');
+    const dots = document.querySelectorAll('.slider-dots .dot');
+    let currentSlide = 0;
+    let startX = 0;
+
+    function goToSlide(index) {
+      if (index < 0 || index >= 4) return;
+      currentSlide = index;
+      track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+      dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+    }
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => goToSlide(i));
+    });
+
+    track.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+
+    track.addEventListener('touchend', (e) => {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) goToSlide(currentSlide + 1);
+        else goToSlide(currentSlide - 1);
+      }
+    }, { passive: true });
   </script>
 </body>
 </html>
