@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -195,15 +196,14 @@
     .hero-bg {
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201, 168, 76, 0.06) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(201, 168, 76, 0.03) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 80% 20%, rgba(201, 168, 76, 0.03) 0%, transparent 60%);
-      animation: heroPulse 8s ease-in-out infinite alternate;
+      background: url('hero-bg.jpg') center/cover no-repeat;
+      opacity: 0.3;
     }
-    @keyframes heroPulse {
-      0% { opacity: 0.6; }
-      100% { opacity: 1; }
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(10,10,10,0.4) 0%, rgba(10,10,10,0.7) 50%, var(--ink) 100%);
     }
     .hero-content {
       position: relative;
@@ -234,7 +234,7 @@
     }
     .hero h1 {
       font-family: var(--font-display);
-      font-size: clamp(48px, 10vw, 96px);
+      font-size: clamp(40px, 8vw, 80px);
       font-weight: 700;
       line-height: 1.0;
       letter-spacing: -0.03em;
@@ -245,10 +245,11 @@
       font-style: normal;
       color: var(--gold);
       display: block;
-      font-size: 0.6em;
+      font-size: 0.45em;
       font-weight: 400;
-      letter-spacing: 0.08em;
-      margin-top: 8px;
+      letter-spacing: 0.1em;
+      margin-top: 12px;
+      text-transform: uppercase;
     }
     .hero-sub {
       font-size: clamp(16px, 2.5vw, 20px);
@@ -348,84 +349,46 @@
       background: var(--ink-light);
     }
     .masters-header { text-align: center; margin-bottom: 64px; }
-    .masters-photo {
+    .masters-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .master-card {
+      background: var(--ink);
+      border: 1px solid rgba(201, 168, 76, 0.06);
       border-radius: 18px;
       overflow: hidden;
-      position: relative;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-    .masters-photo img {
+    .master-card:hover {
+      border-color: rgba(201, 168, 76, 0.15);
+      transform: translateY(-4px);
+    }
+    .master-photo {
       width: 100%;
-      display: block;
+      aspect-ratio: 3/4;
+      overflow: hidden;
     }
-    .masters-names {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: space-around;
-      padding: 32px 24px 24px;
-      background: linear-gradient(transparent, rgba(10,10,10,0.9));
+    .master-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
-    .masters-name-item {
-      text-align: center;
-    }
-    .masters-name {
-      display: block;
+    .master-info { padding: 20px; text-align: center; }
+    .master-name {
       font-family: var(--font-display);
       font-size: 18px;
       font-weight: 600;
       color: var(--body);
       margin-bottom: 4px;
     }
-    .masters-role {
-      display: block;
-      font-size: 12px;
+    .master-role {
+      font-size: 13px;
       color: var(--gold);
       font-weight: 500;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-    }
-
-    .gallery { padding: var(--spacing-section) 0; background: var(--ink); }
-    .gallery-header { text-align: center; margin-bottom: 64px; }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: auto auto;
-      gap: 16px;
-    }
-    .gallery-item {
-      background: var(--ink-light);
-      border-radius: 12px;
-      overflow: hidden;
-      aspect-ratio: 1;
-      position: relative;
-      cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
-    .gallery-item:hover { transform: scale(1.02); }
-    .gallery-item-inner {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, var(--ink-mid), var(--ink));
-      position: relative;
-    }
-    .gallery-item-inner::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, transparent 50%, rgba(10, 10, 10, 0.6));
-    }
-    .gallery-placeholder {
-      font-size: 36px;
-      color: var(--gold);
-      opacity: 0.2;
-      z-index: 1;
     }
 
     .reviews {
@@ -542,28 +505,207 @@
       letter-spacing: 0.03em;
     }
     .form-input,
-    .form-select,
     .form-textarea {
       width: 100%;
-      padding: 14px 18px;
+      padding: 14px 16px;
       font-family: var(--font-body);
       font-size: 15px;
-      color: var(--body);
-      background: var(--ink-light);
-      border: 1px solid rgba(201, 168, 76, 0.1);
+      color: #ffffff;
+      background-color: #1a1a1a;
+      border: 1px solid #333;
       border-radius: 12px;
       outline: none;
-      transition: border-color 0.2s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
     .form-input:focus,
-    .form-select:focus,
     .form-textarea:focus {
-      border-color: var(--gold);
+      border-color: #d4a017;
+      box-shadow: 0 0 0 3px rgba(212,160,23,0.15);
     }
     .form-input::placeholder,
-    .form-textarea::placeholder { color: var(--body-dim); }
-    .form-select { appearance: none; cursor: pointer; }
+    .form-textarea::placeholder { color: #666; }
     .form-textarea { resize: vertical; min-height: 100px; }
+
+    .custom-select {
+      position: relative;
+      width: 100%;
+      cursor: pointer;
+    }
+    .select-selected {
+      padding: 14px 40px 14px 16px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: #ffffff;
+      background-color: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      user-select: none;
+      position: relative;
+    }
+    .select-selected::after {
+      content: '';
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid #d4a017;
+      transition: transform 0.2s ease;
+    }
+    .custom-select.open .select-selected::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+    .select-selected:hover,
+    .custom-select.open .select-selected {
+      border-color: #d4a017;
+      box-shadow: 0 0 0 3px rgba(212,160,23,0.15);
+    }
+    .select-items {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background-color: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      overflow: hidden;
+      z-index: 50;
+    }
+    .custom-select.open .select-items {
+      display: block;
+    }
+    .select-items div {
+      padding: 12px 16px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: #ffffff;
+      transition: background-color 0.15s ease;
+    }
+    .select-items div:hover {
+      background-color: #d4a017;
+      color: #000000;
+    }
+
+    .date-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .date-wrapper .date-input {
+      width: 100%;
+      padding: 14px 44px 14px 16px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: #ffffff;
+      background-color: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+    }
+    .date-wrapper .date-input:focus {
+      border-color: #d4a017;
+      box-shadow: 0 0 0 3px rgba(212,160,23,0.15);
+    }
+    .date-wrapper .date-input::placeholder { color: #666; }
+    .date-wrapper .calendar-icon {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    .date-wrapper .calendar-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .flatpickr-calendar {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      font-family: var(--font-body);
+    }
+    .flatpickr-months {
+      background: #1a1a1a;
+      border-radius: 12px 12px 0 0;
+    }
+    .flatpickr-months .flatpickr-month {
+      color: #ffffff;
+      fill: #ffffff;
+      height: 44px;
+    }
+    .flatpickr-current-month {
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .flatpickr-current-month input {
+      color: #ffffff;
+    }
+    .flatpickr-weekdays {
+      background: #1a1a1a;
+    }
+    span.flatpickr-weekday {
+      color: #d4a017;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .flatpickr-day {
+      color: #ffffff;
+      border-radius: 8px;
+      border: none;
+      font-size: 13px;
+      line-height: 36px;
+      height: 36px;
+      max-width: 36px;
+    }
+    .flatpickr-day:hover {
+      background: #333;
+      border-color: #333;
+    }
+    .flatpickr-day.selected,
+    .flatpickr-day.selected:hover {
+      background: #d4a017;
+      border-color: #d4a017;
+      color: #000000;
+    }
+    .flatpickr-day.today {
+      border-color: #d4a017;
+    }
+    .flatpickr-day.today:hover {
+      background: #d4a017;
+      color: #000000;
+    }
+    .flatpickr-day.flatpickr-disabled {
+      color: #555;
+    }
+    .flatpickr-monthDropdown-months,
+    .numInputWrapper span {
+      color: #ffffff;
+    }
+    .flatpickr-monthDropdown-months option {
+      background: #1a1a1a;
+      color: #ffffff;
+    }
+    .flatpickr-prev-month,
+    .flatpickr-next-month {
+      fill: #d4a017;
+    }
+    .flatpickr-prev-month:hover,
+    .flatpickr-next-month:hover {
+      fill: #e0c872;
+    }
+
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -629,9 +771,27 @@
     .reveal-delay-3 { transition-delay: 0.3s; }
     .reveal-delay-4 { transition-delay: 0.4s; }
 
+    .icon {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .master-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .master-card:hover .master-photo img {
+      transform: scale(1.05);
+    }
+
     @media (max-width: 1023px) {
-      .gallery-grid { grid-template-columns: repeat(3, 1fr); }
-      .gallery-item:nth-child(1) { grid-column: span 2; }
+      .masters-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 833px) {
@@ -654,77 +814,16 @@
         border-bottom: 1px solid rgba(201, 168, 76, 0.1);
       }
       .services-grid { grid-template-columns: 1fr; }
-      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-      .gallery-item:nth-child(1) { grid-column: span 2; }
+      .masters-grid { grid-template-columns: repeat(2, 1fr); }
       .reviews-grid { grid-template-columns: 1fr; }
       .contact-grid { grid-template-columns: 1fr; gap: 48px; }
       .form-row { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 640px) {
-      .hero h1 { font-size: clamp(40px, 12vw, 64px); }
-      .hero h1 em { font-size: 0.55em; }
-      .masters-names { flex-direction: column; gap: 12px; }
-      .gallery-grid { grid-template-columns: 1fr 1fr; }
-      .gallery-item:nth-child(1) { grid-column: span 2; }
-    }
-
-    .nav-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 99;
-    }
-    .nav-overlay.active { display: block; }
-
-    .icon {
-      width: 24px;
-      height: 24px;
-      fill: none;
-      stroke: var(--gold);
-      stroke-width: 1.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-    .master-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    .master-card:hover .master-photo img {
-      transform: scale(1.05);
-    }
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      position: relative;
-      z-index: 1;
-    }
-    .gallery-item:hover img {
-      transform: scale(1.08);
-    }
-    .gallery-item-inner {
-      background: var(--ink-mid);
-    }
-    .hero-bg-img {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201, 168, 76, 0.08) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(201, 168, 76, 0.04) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 80% 20%, rgba(201, 168, 76, 0.04) 0%, transparent 60%);
-      opacity: 1;
-    }
-    .hero-bg-gradient {
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(180deg, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.7) 60%, var(--ink) 100%),
-        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201, 168, 76, 0.06) 0%, transparent 70%);
+      .hero h1 { font-size: clamp(36px, 10vw, 56px); }
+      .hero h1 em { font-size: 0.5em; }
+      .masters-grid { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto; }
     }
   </style>
 </head>
@@ -749,8 +848,7 @@
   <div class="nav-overlay" id="navOverlay"></div>
 
   <section class="hero" id="hero">
-    <div class="hero-bg-img"></div>
-    <div class="hero-bg-gradient"></div>
+    <div class="hero-bg"></div>
     <div class="hero-content">
       <div class="hero-badge">Barbershop</div>
       <h1>KINGS CUT<em>Мужской стиль. Королевский уровень.</em></h1>
@@ -780,7 +878,7 @@
         </div>
         <div class="service-card reveal reveal-delay-2">
           <div class="service-icon">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="6" rx="1"/><line x1="8" y1="2" x2="8" y2="8"/><line x1="10" y1="2" x2="10" y2="8"/><line x1="12" y1="2" x2="12" y2="8"/><line x1="14" y1="2" x2="14" y2="8"/><line x1="16" y1="2" x2="16" y2="8"/><path d="M10 8v4c0 1-1 2-2 3"/><path d="M14 8v4c0 1 1 2 2 3"/><path d="M8 15c0 2 1.8 3 4 3s4-1 4-3"/></svg>
+            <svg class="icon" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="6" rx="1"/><line x1="8" y1="2" x2="8" y2="8"/><line x1="10" y1="2" x2="10" y2="8"/><line x1="12" y1="2" x2="12" y2="8"/><line x1="14" y1="2" x2="14" y2="8"/><line x1="16" y1="2" x2="16" y2="8"/><path d="M10 8v4c0 1-1 2-2 3"/><path d="M14 8v4c0 1 1 2 2 3"/><path d="M8 15c0 2 1.8 3 4 3s4-1 4-3"/></svg>
           </div>
           <div class="service-name">Борода</div>
           <div class="service-desc">Оформление, подгонка и контуринг бороды с горячим полотенцем</div>
@@ -805,59 +903,54 @@
         <h2 class="section-title">Наши мастера</h2>
         <p class="section-subtitle" style="margin:16px auto 0">Профессионалы, которые знают толк в мужском стиле</p>
       </div>
-      <div class="masters-photo reveal">
-        <img src="masters.jpg" alt="Наши мастера" loading="lazy">
-        <div class="masters-names">
-          <div class="masters-name-item reveal reveal-delay-1">
-            <span class="masters-name">Данил К.</span>
-            <span class="masters-role">Топ-барбер</span>
-          </div>
-          <div class="masters-name-item reveal reveal-delay-2">
-            <span class="masters-name">Артём М.</span>
-            <span class="masters-role">Стилист-колорист</span>
-          </div>
-          <div class="masters-name-item reveal reveal-delay-3">
-            <span class="masters-name">Руслан В.</span>
-            <span class="masters-role">Барбер</span>
-          </div>
-          <div class="masters-name-item reveal reveal-delay-4">
-            <span class="masters-name">Михаил С.</span>
-            <span class="masters-role">Мастер бороды</span>
-          </div>
+      <div class="masters-grid">
+        <div class="master-card reveal reveal-delay-1">
+          <div class="master-photo"><img src="master1.png" alt="Данил К."></div>
+          <div class="master-info"><div class="master-name">Данил К.</div><div class="master-role">Топ-барбер</div></div>
+        </div>
+        <div class="master-card reveal reveal-delay-2">
+          <div class="master-photo"><img src="master2.png" alt="Артём М."></div>
+          <div class="master-info"><div class="master-name">Артём М.</div><div class="master-role">Стилист-колорист</div></div>
+        </div>
+        <div class="master-card reveal reveal-delay-3">
+          <div class="master-photo"><img src="master3.png" alt="Руслан В."></div>
+          <div class="master-info"><div class="master-name">Руслан В.</div><div class="master-role">Барбер</div></div>
+        </div>
+        <div class="master-card reveal reveal-delay-4">
+          <div class="master-photo"><img src="master4.png" alt="Михаил С."></div>
+          <div class="master-info"><div class="master-name">Михаил С.</div><div class="master-role">Мастер бороды</div></div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="gallery" id="gallery">
-    <div class="container">
-      <div class="gallery-header reveal">
-        <div class="section-label">Портфолио</div>
-        <h2 class="section-title">Наши работы</h2>
-        <p class="section-subtitle" style="margin:16px auto 0">Смотрите результат — оценивайте качество</p>
+  <section id="works" style="background:#111; padding: 60px 40px;">
+    <p style="color:#d4a017; text-align:center; letter-spacing:3px; font-size:13px;">ПОРТФОЛИО</p>
+    <h2 style="color:#fff; text-align:center; font-size:36px; margin-bottom:8px;">Наши работы</h2>
+    <p style="color:#888; text-align:center; margin-bottom:40px;">Смотрите результат — оценивайте качество</p>
+
+    <div style="
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 280px 280px;
+      gap: 12px;
+      max-width: 1200px;
+      margin: 0 auto;
+    ">
+      <div style="grid-column:1; grid-row:1/3; overflow:hidden; border-radius:16px;">
+        <img src="gallery1.jpg" style="width:100%; height:100%; object-fit:cover;">
       </div>
-      <div class="gallery-grid">
-        <div class="gallery-item reveal">
-          <div class="gallery-item-inner"><img src="gallery1.jpg" alt="Стрижка" loading="lazy"></div>
-        </div>
-        <div class="gallery-item reveal reveal-delay-1">
-          <div class="gallery-item-inner"><img src="gallery2.jpg" alt="Оформление бороды" loading="lazy"></div>
-        </div>
-        <div class="gallery-item reveal reveal-delay-2">
-          <div class="gallery-item-inner"><img src="gallery3.jpg" alt="Барбершоп" loading="lazy"></div>
-        </div>
-        <div class="gallery-item reveal reveal-delay-1">
-          <div class="gallery-item-inner"><img src="gallery4.jpg" alt="Стрижка" loading="lazy"></div>
-        </div>
-        <div class="gallery-item reveal reveal-delay-2">
-          <div class="gallery-item-inner"><img src="gallery5.jpg" alt="Работа мастера" loading="lazy"></div>
-        </div>
-        <div class="gallery-item reveal reveal-delay-3">
-          <div class="gallery-item-inner"><img src="gallery6.jpg" alt="Триммер" loading="lazy"></div>
-        </div>
-        <div class="gallery-item reveal reveal-delay-4">
-          <div class="gallery-item-inner"><img src="gallery7.jpg" alt="Усы" loading="lazy"></div>
-        </div>
+      <div style="overflow:hidden; border-radius:16px;">
+        <img src="gallery2.jpg" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div style="overflow:hidden; border-radius:16px;">
+        <img src="gallery3.jpg" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div style="overflow:hidden; border-radius:16px;">
+        <img src="gallery4.jpg" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div style="overflow:hidden; border-radius:16px;">
+        <img src="gallery5.jpg" style="width:100%; height:100%; object-fit:cover;">
       </div>
     </div>
   </section>
@@ -919,7 +1012,7 @@
             <div class="contact-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
             <div>
               <div class="contact-label">Адрес</div>
-              <div class="contact-value">ул. Центральная, 42, центр города</div>
+              <div class="contact-value">г. Москва, ул. Центральная, 42</div>
             </div>
           </div>
           <div class="contact-item">
@@ -948,42 +1041,47 @@
           <form id="bookingForm" onsubmit="event.preventDefault(); this.querySelector('.btn').textContent='Заявка отправлена!'; this.querySelector('.btn').style.background='#2d8a4e'; this.querySelector('.btn').style.color='#fff';">
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="name">Имя</label>
-                <input class="form-input" type="text" id="name" placeholder="Ваше имя" required>
+                <label class="form-label">Имя</label>
+                <input class="form-input" type="text" placeholder="Ваше имя" required>
               </div>
               <div class="form-group">
-                <label class="form-label" for="phone">Телефон</label>
-                <input class="form-input" type="tel" id="phone" placeholder="+7 (___) ___-__-__" required>
+                <label class="form-label">Телефон</label>
+                <input class="form-input" type="tel" placeholder="+7 (___) ___-__-__" required>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="service">Услуга</label>
-                <select class="form-select" id="service" required>
-                  <option value="">Выберите услугу</option>
-                  <option value="haircut">Стрижка — 1 500 ₽</option>
-                  <option value="beard">Борода — 1 000 ₽</option>
-                  <option value="combo">Комбо — 2 200 ₽</option>
-                </select>
+                <label class="form-label">Услуга</label>
+                <div class="custom-select" data-name="service">
+                  <div class="select-selected">Выберите услугу</div>
+                  <div class="select-items">
+                    <div data-value="haircut">Стрижка — 1 500 ₽</div>
+                    <div data-value="beard">Борода — 1 000 ₽</div>
+                    <div data-value="combo">Комбо — 2 200 ₽</div>
+                  </div>
+                </div>
               </div>
               <div class="form-group">
-                <label class="form-label" for="date">Дата</label>
-                <input class="form-input" type="date" id="date" required>
+                <label class="form-label">Дата</label>
+                <input class="form-input" type="text" id="datepicker" placeholder="дд.мм.гггг" readonly style="padding-right:44px; cursor:pointer;">
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label" for="master">Мастер</label>
-              <select class="form-select" id="master">
-                <option value="">Любой свободный</option>
-                <option value="danil">Данил К.</option>
-                <option value="artem">Артём М.</option>
-                <option value="ruslan">Руслан В.</option>
-                <option value="mikhail">Михаил С.</option>
-              </select>
+              <label class="form-label">Мастер</label>
+              <div class="custom-select" data-name="master">
+                <div class="select-selected">Любой свободный</div>
+                <div class="select-items">
+                  <div data-value="">Любой свободный</div>
+                  <div data-value="danil">Данил К.</div>
+                  <div data-value="artem">Артём М.</div>
+                  <div data-value="ruslan">Руслан В.</div>
+                  <div data-value="mikhail">Михаил С.</div>
+                </div>
+              </div>
             </div>
             <div class="form-group">
-              <label class="form-label" for="comment">Комментарий</label>
-              <textarea class="form-textarea" id="comment" placeholder="Пожелания к стрижке..." rows="3"></textarea>
+              <label class="form-label">Комментарий</label>
+              <textarea class="form-textarea" placeholder="Пожелания к стрижке..." rows="3"></textarea>
             </div>
             <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Записаться</button>
           </form>
@@ -1006,6 +1104,8 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
   <script>
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('navLinks');
@@ -1043,6 +1143,34 @@
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       });
+    });
+
+    document.querySelectorAll('.custom-select').forEach(select => {
+      const selected = select.querySelector('.select-selected');
+      const items = select.querySelector('.select-items');
+      selected.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.custom-select.open').forEach(s => {
+          if (s !== select) s.classList.remove('open');
+        });
+        select.classList.toggle('open');
+      });
+      items.querySelectorAll('div').forEach(item => {
+        item.addEventListener('click', () => {
+          selected.textContent = item.textContent;
+          select.dataset.value = item.dataset.value;
+          select.classList.remove('open');
+        });
+      });
+    });
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.custom-select.open').forEach(s => s.classList.remove('open'));
+    });
+
+    flatpickr("#datepicker", {
+      locale: "ru",
+      dateFormat: "d.m.Y",
+      minDate: "today"
     });
   </script>
 </body>
